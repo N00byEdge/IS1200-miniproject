@@ -1,7 +1,7 @@
 #include "Board.h"
 
-void init(struct board* b) {
+void init(enum tileType *b) {
 	for(int col = 0; col < COLUMNS; ++ col)
 		for(int row = 0; row < ROWS; ++ row)
-			b->shipAt[col][row] = 0, b->hasBombed[col][row] = 0;
+			b[col + row * COLUMNS] = 0;
 }
