@@ -1,3 +1,5 @@
+#pragma once
+
 struct packet {
 	int x, y;
 	bool didHit;
