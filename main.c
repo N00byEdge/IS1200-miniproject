@@ -25,4 +25,13 @@ int main() {
 			if(0)// ..
 				rotation = !rotation;
 			if(0) // place button is pressed
+				break;
+			// rerenderPlacement(&ourBoard, cursorX, cursorY, rotation);
+		}
+		for(i = 0; i < shipLengths[ship]; ++ i)
+			if(ourBoard[i*!rotation + cursorX + COLUMNS*(i*rotation + cursorY)])
+				goto retryplace;
+		for(i = 0; i < shipLengths[ship]; ++ i)
+			ourBoard[i*!rotation + cursorX + COLUMNS*(i*rotation + cursorY)] = 1;
+	}
 }
