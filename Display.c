@@ -53,11 +53,11 @@ void writeData(unsigned char c, unsigned char d) {
 	setcs();
 }
 
-void writeData16(unsigned int data) {
+void writeData16(unsigned data) {
 	writeData(data >> 8, data);
 }
 
-void setData(unsigned char addr, unsigned int data) {
+void setData(unsigned char addr, unsigned data) {
 	writeCmd(0x00, addr);
 	writeData16(data);
 }
@@ -68,13 +68,8 @@ void displayinit() {
 	TRISFCLR = 0x00e; // 0000 1110
 	TRISDCLR = 0x103; // 0001 0000 0011
 	// Init sequence
-	clrrs();
-	clrwr();
-	clrrd();
-	clrcs();
-	clrrst();
-	clrled();
 
+	setrd();
 	setrst();
 	fastsleep(5);
 	clrrst();

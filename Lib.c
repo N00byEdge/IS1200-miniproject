@@ -8,6 +8,6 @@ int getHighestBitSet(unsigned i) {
 
 volatile void fastsleep(unsigned t) {
 	for(int i = 0; i < t; ++ i)
-		for(int j = 0; j < 1000; ++ j)
+		for(int j = 0; j < 10000; ++ j)
 			j = j;
 }
