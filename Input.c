@@ -4,12 +4,8 @@
 // TODO: find pins for buttons
 // TODO: setup interrupts
 
-<<<<<<< Updated upstream
 void buttonsInit(){
 	enable_interrupt();
-=======
-void buttonsINIT(){
->>>>>>> Stashed changes
 	T2CON = 0;             // Reset timer
 	T2CONSET = 7 << 4;     // 1:256 prescaling
 	PR2 = 3125;          	 // 800,000/256 = 3,125 will be 1/100 second period
