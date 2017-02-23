@@ -1,9 +1,27 @@
 #include "Input.h"
 
 // TODO: Set up bus for buttons
+// TODO: find pins for buttons
+// TODO: setup interrupts
+
+void buttonsINIT(){
+	enable_interrupt();
+	T2CON = 0;             // Reset timer
+	T2CONSET = 7 << 4;     // 1:256 prescaling
+	PR2 = 3125;          	 // 800,000/256 = 3,125 will be 1/100 second period
+	TMR2 = 0;               // Reset counter
+	T2CONSET = 0x08000;     // Start csounter
+	IPCCLR(2) = 0x1C;       // Clear pri for interrupt
+	IPCSET(2) = 0x08;       // Set pri for interrupt
+	IPCCLR(2) = 0x3;        // Clear spri for interrupt
+	IPCSET(2) = 0x2;        // Set spri for interrupt
+	IECSET(0) = 1 << 8;     // Enable Interrupt
+
+}
+
 
 unsigned getButtons() {
-	return 0;
+	return 0x7 &(PORTD >> 5);
 }
 
 unsigned getButtonAccept() {

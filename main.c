@@ -26,6 +26,8 @@ enum tileType ourBoard[COLUMNS * ROWS],
 int main() {
 	const static int shipLengths[] = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
 
+	buttonsINIT();
+
 	displayinit();
 
 	while(1) {
