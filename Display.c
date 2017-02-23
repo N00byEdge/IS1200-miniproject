@@ -62,6 +62,16 @@ void setData(unsigned char addr, unsigned data) {
 	writeData16(data);
 }
 
+void setArea(unsigned x0, unsigned x1, unsigned y0, unsigned y1) {
+	setData(WINDOW_XADDR_START, x0);
+	setData(WINDOW_XADDR_END,   x1);
+	setData(WINDOW_YADDR_START, y0);
+	setData(WINDOW_YADDR_END,   y1);
+	setData(GRAM_XADDR, x0);
+	setData(GRAM_YADDR, y0);
+	writeCmd(0x00, 0x22);
+}
+
 void displayinit() {
 	// do the TRIS for output
 	TRISECLR = 0x0ff; // 1111 1111
@@ -131,16 +141,11 @@ void displayinit() {
 	setData(0x07, 0x0133);
 
 	setled();
-}
 
-void setArea(unsigned x0, unsigned x1, unsigned y0, unsigned y1) {
-	setData(WINDOW_XADDR_START, x0);
-	setData(WINDOW_XADDR_END,   x1);
-	setData(WINDOW_YADDR_START, y0);
-	setData(WINDOW_YADDR_END,   y1);
-	setData(GRAM_XADDR, x0);
-	setData(GRAM_YADDR, y0);
-	writeCmd(0x00, 0x22);
+	setArea(0, 320, 0, 240);
+	for(int y = 0; y < 240; ++ y)
+		for(int x = 0; x < 320; ++ y)
+			writeData16(0x0000);
 }
 
 void paint(unsigned c) {

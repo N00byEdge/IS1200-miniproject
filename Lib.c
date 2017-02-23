@@ -6,7 +6,7 @@ int getHighestBitSet(unsigned i) {
 	return j;
 }
 
-volatile void fastsleep(unsigned t) {
+void fastsleep(unsigned t) {
 	for(int i = 0; i < t; ++ i)
 		for(int j = 0; j < 10000; ++ j)
 			j = j;
