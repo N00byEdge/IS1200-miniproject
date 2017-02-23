@@ -10,4 +10,4 @@ unsigned getButtonDown();
 unsigned getButtonLeft();
 unsigned getButtonRight();
 void enable_interrupt();
-void buttonsINIT();
+void buttonsInit();

@@ -26,7 +26,16 @@ enum tileType ourBoard[COLUMNS * ROWS],
 int main() {
 	const static int shipLengths[] = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
 
-	buttonsINIT();
+	buttonsInit();
+
+	OSCCONCLR = 0x100000;
+	OSCCONSET = 0x080000;
+
+	AD1PCFG = 0xFFFF;
+	ODCE = 0x0;
+	ODCF = 0x0;
+	ODCD = 0x0;
+	PORTE = 0x0;
 
 	displayinit();
 

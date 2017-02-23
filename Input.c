@@ -4,7 +4,7 @@
 // TODO: find pins for buttons
 // TODO: setup interrupts
 
-void buttonsINIT(){
+void buttonsInit(){
 	enable_interrupt();
 	T2CON = 0;             // Reset timer
 	T2CONSET = 7 << 4;     // 1:256 prescaling
