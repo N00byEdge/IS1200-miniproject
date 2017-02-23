@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Parameters.h"
+#include "Display.h"
 
 enum tileType {
 	TILE_EMPTY = 1,
@@ -10,3 +11,5 @@ enum tileType {
 };
 
 void init(enum tileType *b);
+
+void printBoard(enum tileType *b);
