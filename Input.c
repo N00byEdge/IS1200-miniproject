@@ -4,8 +4,12 @@
 // TODO: find pins for buttons
 // TODO: setup interrupts
 
+<<<<<<< Updated upstream
 void buttonsInit(){
 	enable_interrupt();
+=======
+void buttonsINIT(){
+>>>>>>> Stashed changes
 	T2CON = 0;             // Reset timer
 	T2CONSET = 7 << 4;     // 1:256 prescaling
 	PR2 = 3125;          	 // 800,000/256 = 3,125 will be 1/100 second period
@@ -16,12 +20,15 @@ void buttonsInit(){
 	IPCCLR(2) = 0x3;        // Clear spri for interrupt
 	IPCSET(2) = 0x2;        // Set spri for interrupt
 	IECSET(0) = 1 << 8;     // Enable Interrupt
+}
+
+void user_isr () {
+
 
 }
 
-
 unsigned getButtons() {
-	return 0x7 &(PORTD >> 5);
+	return 0x7 &(PORTB >> 5);
 }
 
 unsigned getButtonAccept() {
