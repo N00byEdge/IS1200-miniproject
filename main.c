@@ -1,6 +1,8 @@
 #include "Board.h"
-#include "Renderer.h"
 #include "Parameters.h"
+#include "Input.h"
+#include "Display.h"
+#include "Lib.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,20 +13,41 @@
 enum tileType ourBoard[COLUMNS * ROWS],
 			theirBoard[COLUMNS * ROWS];
 
+#define White          0xFFFF
+#define Black          0x0000
+#define Blue           0x001F
+#define Blue2          0x051F
+#define Red            0xF800
+#define Magenta        0xF81F
+#define Green          0x07E0
+#define Cyan           0x7FFF
+#define Yellow         0xFFE0
+
 int main() {
 	const static int shipLengths[] = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
+
+	displayinit();
+
+	while(1) {
+		paint(White);
+		//fastsleep(100);
+		paint(Black);
+		//fastsleep(100);
+		paint(Blue);
+		//fastsleep(100);
+	}
 
 	for(int ship = 0; ship < sizeof(shipLengths)/sizeof(shipLengths[0]); ++ ship) {
 		int cursorX = 0, cursorY = 0, rotation = 0, i;
 		retryplace:
 		while (1) {
-			if(0) // If right cursor is pressed
+			if(getButtonRight()) // If right cursor is pressed
 				++ cursorX;
-			if(0) // ..
+			if(getButtonLeft()) // ..
 				-- cursorX;
-			if(0)// ..
+			if(getButtonRotate()) // ..
 				rotation = !rotation;
-			if(0) // place button is pressed
+			if(getButtonAccept()) // place button is pressed
 				break;
 			// rerenderPlacement(&ourBoard, cursorX, cursorY, rotation);
 		}
