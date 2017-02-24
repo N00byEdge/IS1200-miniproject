@@ -137,9 +137,9 @@ void displayinit() {
 	setData(0x98, 0x0000);
 	setData(0x07, 0x0133);
 
-	setArea(0, 320, 0, 240);
+	setArea(0, 240, 0, 320);
 	for(int y = 0; y < 240; ++ y)
-		for(int x = 0; x < 320; ++ y)
+		for(int x = 0; x < 320; ++ x)
 			writeData16(0x0000);
 }
 
