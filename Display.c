@@ -8,23 +8,20 @@
 #define GRAM_YADDR		    0x0021
 #define GRAMWR 			    0x0022
 
-#define setrs() PORTFSET = 1 << 2
-#define clrrs() PORTFCLR = 1 << 2
+#define setrs() PORTFSET = 1 << 6
+#define clrrs() PORTFCLR = 1 << 6
 
-#define setwr() PORTFSET = 1 << 3
-#define clrwr() PORTFCLR = 1 << 3
+#define setwr() PORTFSET = 1 << 4
+#define clrwr() PORTFCLR = 1 << 4
 
-#define setrd() PORTDSET = 1 << 8
-#define clrrd() PORTDCLR = 1 << 8
+#define setrd() PORTFSET = 1 << 2
+#define clrrd() PORTFCLR = 1 << 2
 
-#define setcs() PORTDSET = 1 << 0
-#define clrcs() PORTDCLR = 1 << 0
+#define setcs() PORTFSET = 1 << 5
+#define clrcs() PORTFCLR = 1 << 5
 
-#define setrst() PORTFSET = 1 << 1
-#define clrrst() PORTFCLR = 1 << 1
-
-#define setled() PORTDSET = 1 << 1
-#define clrled() PORTDCLR = 1 << 1
+#define setrst() PORTBSET = 1 << 1
+#define clrrst() PORTBCLR = 1 << 1
 
 #define setbus(d)	PORTECLR = 0x0ff; \
 				 	PORTESET = d
@@ -74,9 +71,9 @@ void setArea(unsigned x0, unsigned x1, unsigned y0, unsigned y1) {
 
 void displayinit() {
 	// do the TRIS for output
-	TRISECLR = 0x0ff; // 1111 1111
-	TRISFCLR = 0x00e; // 0000 1110
-	TRISDCLR = 0x103; // 0001 0000 0011
+	TRISBCLR = (1 << 1);
+	TRISFCLR = (1 << 2) | (1 << 4) | (1 << 5) | (1 << 6);
+	TRISECLR = 0x0ff;
 	// Init sequence
 
 	setrd();
@@ -139,8 +136,6 @@ void displayinit() {
 	setData(0x97, 0x0000);
 	setData(0x98, 0x0000);
 	setData(0x07, 0x0133);
-
-	setled();
 
 	setArea(0, 320, 0, 240);
 	for(int y = 0; y < 240; ++ y)
