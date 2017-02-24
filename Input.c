@@ -2,7 +2,6 @@
 
 // TODO: Set up bus for buttons
 // TODO: find pins for buttons
-// TODO: setup interrupts
 
 void buttonsInit(){
 
