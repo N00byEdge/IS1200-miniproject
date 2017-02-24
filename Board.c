@@ -18,10 +18,6 @@ void printBoard(enum tileType *b) {
 
 	paint(colorsTo16Bit(backgroundColor));
 
-	for(int x = 0; x < COLUMNS; ++ x)
-		for(int y = 0; y < ROWS; ++ y)
-			b[x + y*COLUMNS] |= (x+y)%2 ? ((x+y)%3 ? TILE_SHIP : TILE_MISS) : ((x+y)%3 ? 0 : TILE_HIT);
-
 	for(int y = 0; y < ROWS; ++ y) {
 		for(int x = 0; x < COLUMNS; ++ x) {
 			unsigned char drawArea[16*16*4];
