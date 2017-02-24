@@ -4,7 +4,6 @@
 #include "Display.h"
 #include "Lib.h"
 #include "Renderer.h"
-#include "ImageData.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,38 +33,67 @@ int main() {
 	SPI2CONSET = 0x8000;	// Yep
 
 	displayinit();
-	unsigned char paintArea[4*16*16];
-	unsigned char background[4] = {0xff, 0xa7, 0x1a, 0xff};
-	fillColor(paintArea, background, 16, 16);
-	renderTile(shipPicture, paintArea, 0, 0, 16, 16, 0, 0);
-
-	while(1) {
-		paint(colorsTo16Bit(background));
-		PORTE = 5;
-		for(int i = 0; i < 200; i += 16)
-			for(int j = 0; j < 200; j += 16);
-		paintimg(paintArea, 16, 16, 0, 0);
-		fastsleep(2000);
-	}
 
 	for(int ship = 0; ship < sizeof(shipLengths)/sizeof(shipLengths[0]); ++ ship) {
-		int cursorX = 0, cursorY = 0, rotation = 0, i;
+		int cursorX = 0, cursorY = 0, rotation = 0;
+		printBoard(ourBoard);
 		retryplace:
 		while (1) {
-			if(getButtonRight()) // If right cursor is pressed
+			for(int i = 0; i < shipLengths[ship]; ++ i)
+				ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
+			while(!getButtons());
+			if(getButtonRight()) {
+				if(cursorX + !rotation*shipLengths[ship] >= COLUMNS) continue;
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
 				++ cursorX;
-			if(getButtonLeft()) // ..
+				while(getButtonRight());
+			}
+
+			if(getButtonLeft()) {
+				if(!cursorX) continue;
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
 				-- cursorX;
-			if(getButtonRotate()) // ..
+				while(getButtonLeft());
+			}
+
+			if(getButtonDown()) {
+				if(cursorY + rotation*shipLengths[ship] >= ROWS) continue;
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
+				++ cursorY;
+				while(getButtonDown());
+			}
+
+			if(getButtonUp()) {
+				if(!cursorY) continue;
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
+				-- cursorY;
+				while(getButtonUp());
+			}
+
+			if(getButtonRotate()) {
 				rotation = !rotation;
-			if(getButtonAccept()) // place button is pressed
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
+				if(cursorX + !rotation*shipLengths[ship] >= 10) cursorX -= shipLengths[ship] - 1;
+				if(cursorY +  rotation*shipLengths[ship] >= 10) cursorY -= shipLengths[ship] - 1;
+				while(getButtonRotate());
+			}
+
+			if(getButtonAccept()) {
+				while(getButtonAccept());
 				break;
-			// rerenderPlacement(&ourBoard, cursorX, cursorY, rotation);
+			}
+			printBoard(ourBoard);
+			fastsleep(1000);
 		}
-		for(i = 0; i < shipLengths[ship]; ++ i)
+		for(int i = 0; i < shipLengths[ship]; ++ i)
 			if(ourBoard[i*!rotation + cursorX + COLUMNS*(i*rotation + cursorY)])
 				goto retryplace;
-		for(i = 0; i < shipLengths[ship]; ++ i)
+		for(int i = 0; i < shipLengths[ship]; ++ i)
 			ourBoard[i*!rotation + cursorX + COLUMNS*(i*rotation + cursorY)] = 1;
 	}
 }
