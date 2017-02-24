@@ -3,6 +3,8 @@
 #include "Input.h"
 #include "Display.h"
 #include "Lib.h"
+#include "Renderer.h"
+#include "ImageData.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,18 +30,22 @@ int main() {
 
 	buttonsInit();
 
-	SPI2CONSET = 0x20;
-	SPI2CONSET = 0x8000;
+	SPI2CONSET = 0x20;		// Yes
+	SPI2CONSET = 0x8000;	// Yep
 
 	displayinit();
+	unsigned char paintArea[4*16*16];
+	unsigned char background[4] = {0xff, 0xa7, 0x1a, 0xff};
+	fillColor(paintArea, background, 16, 16);
+	renderTile(shipPicture, paintArea, 0, 0, 16, 16, 0, 0);
 
 	while(1) {
-		paint(White);
-		//fastsleep(100);
-		paint(Black);
-		//fastsleep(100);
-		paint(Blue);
-		//fastsleep(100);
+		paint(colorsTo16Bit(background));
+		PORTE = 5;
+		for(int i = 0; i < 200; i += 16)
+			for(int j = 0; j < 200; j += 16);
+		paintimg(paintArea, 16, 16, 0, 0);
+		fastsleep(2000);
 	}
 
 	for(int ship = 0; ship < sizeof(shipLengths)/sizeof(shipLengths[0]); ++ ship) {

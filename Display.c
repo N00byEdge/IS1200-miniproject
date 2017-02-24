@@ -70,11 +70,9 @@ void setArea(unsigned x0, unsigned x1, unsigned y0, unsigned y1) {
 }
 
 void displayinit() {
-	// do the TRIS for output
 	TRISBCLR = (1 << 1);
 	TRISFCLR = (1 << 2) | (1 << 4) | (1 << 5) | (1 << 6);
 	TRISECLR = 0x0ff;
-	// Init sequence
 
 	setrd();
 	setrst();
@@ -136,11 +134,6 @@ void displayinit() {
 	setData(0x97, 0x0000);
 	setData(0x98, 0x0000);
 	setData(0x07, 0x0133);
-
-	setArea(0, 240, 0, 320);
-	for(int y = 0; y < 240; ++ y)
-		for(int x = 0; x < 320; ++ x)
-			writeData16(0x0000);
 }
 
 void paint(unsigned c) {
@@ -148,4 +141,24 @@ void paint(unsigned c) {
 	for(int y = 0; y < 320; ++ y)
 		for(int x = 0; x < 240; ++ x)
 			writeData16(c);
+}
+
+void paintimg(const char *data, unsigned xSize, unsigned ySize, unsigned atX, unsigned atY) {
+	PORTE = 5;
+	setArea(atX, xSize, atY, ySize);
+	for(int x = 0; x < xSize; ++ x)
+		for(int y = 0; y < ySize; ++ y)
+			writeData16(colorsTo16Bit(data + x*4 + y*4*xSize));
+}
+
+unsigned colorsTo16Bit(const unsigned char *d) {
+	//return 0x0000;
+	return ((d[0]>>3) << 11) | ((d[1]>>2) << 5) | (d[2]>>3);
+}
+
+unsigned fillColor(unsigned char *data, const unsigned char *color, int xSize, int ySize) {
+	for(int x = 0; x < xSize; ++ x)
+		for(int y = 0; y < ySize; ++ y)
+			for(int c = 0; c < 4; ++ c)
+				data[c + x*4 + y*4* xSize] = color[c];
 }
