@@ -147,5 +147,5 @@ void paint(unsigned c) {
 	setArea(0, 240, 0, 320);
 	for(int y = 0; y < 320; ++ y)
 		for(int x = 0; x < 240; ++ x)
-			writeData16(x%240);
+			writeData16(c);
 }
