@@ -28,14 +28,8 @@ int main() {
 
 	buttonsInit();
 
-	OSCCONCLR = 0x100000;
-	OSCCONSET = 0x080000;
-
-	AD1PCFG = 0xFFFF;
-	ODCE = 0x0;
-	ODCF = 0x0;
-	ODCD = 0x0;
-	PORTE = 0x0;
+	SPI2CONSET = 0x20;
+	SPI2CONSET = 0x8000;
 
 	displayinit();
 
