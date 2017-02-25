@@ -154,22 +154,6 @@ void paintimg(const char *data, unsigned xSize, unsigned ySize, unsigned atX, un
     }
 }
 
-void frame(unsigned char* data) {
-	for(int x = 0; x < 16; ++ x)
-		for(int y = 0; y < 16; ++ y)
-			for(int c = 0; c < 3; ++ c)
-				if(x == 0 || y == 0 || x == 15 || y == 15)
-					data[c + x*4 + y*4*16] = c == 3 ? 0xff : 0x00;
-}
-
 unsigned colorsTo16Bit(const unsigned char *d) {
-	//return 0x0000;
 	return ((d[0]>>3) << 11) | ((d[1]>>2) << 5) | (d[2]>>3);
-}
-
-unsigned fillColor(unsigned char *data, const unsigned char *color, int xSize, int ySize) {
-	for(int x = 0; x < xSize; ++ x)
-		for(int y = 0; y < ySize; ++ y)
-			for(int c = 0; c < 4; ++ c)
-				data[c + x*4 + y*4* xSize] = color[c];
 }

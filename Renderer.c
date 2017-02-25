@@ -23,3 +23,18 @@ void renderSimple(const unsigned char *renderThis, unsigned char *ontoThis, int 
 		}
 	}
 }
+
+void frame(unsigned char* data) {
+	for(int x = 0; x < 16; ++ x)
+		for(int y = 0; y < 16; ++ y)
+			for(int c = 0; c < 3; ++ c)
+				if(x == 0 || y == 0 || x == 15 || y == 15)
+					data[c + x*4 + y*4*16] = c == 3 ? 0xff : 0x00;
+}
+
+unsigned fillColor(unsigned char *data, const unsigned char *color, int minX, int ySize) {
+	for(int x = 0; x < xSize; ++ x)
+		for(int y = 0; y < ySize; ++ y)
+			for(int c = 0; c < 4; ++ c)
+				data[c + x*4 + y*4* xSize] = color[c];
+}
