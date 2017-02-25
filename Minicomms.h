@@ -8,4 +8,4 @@ struct packet {
 
 bool sendShot(struct packet *);
 
-struct packet listenHit();
+struct packet listenShot();
