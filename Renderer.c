@@ -32,7 +32,7 @@ void frame(unsigned char* data) {
 					data[c + x*4 + y*4*16] = c == 3 ? 0xff : 0x00;
 }
 
-unsigned fillColor(unsigned char *data, const unsigned char *color, int minX, int ySize) {
+unsigned fillColor(unsigned char *data, const unsigned char *color, int xSize, int ySize) {
 	for(int x = 0; x < xSize; ++ x)
 		for(int y = 0; y < ySize; ++ y)
 			for(int c = 0; c < 4; ++ c)
