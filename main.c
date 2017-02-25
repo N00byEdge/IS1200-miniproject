@@ -32,6 +32,7 @@ int main() {
 
 	displayinit();
 	buttonsInit();
+	printBoard(theirBoard, 0);
 
 	// Ship placement loop
 	for(int ship = 0; ship < sizeof(shipLengths)/sizeof(shipLengths[0]); ++ ship) {
@@ -42,7 +43,7 @@ int main() {
 		while (1) {
 			for(int i = 0; i < shipLengths[ship]; ++ i)
 				ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
-			printBoard(ourBoard);
+			printBoard(ourBoard, 160);
 			nvm:
 			while(!getButtons());
 			if(getButtonRight()) {

@@ -15,4 +15,4 @@ enum tileType {
 
 void init(enum tileType *b);
 
-void printBoard(enum tileType *b);
+void printBoard(enum tileType *b, int yOffset);

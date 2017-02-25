@@ -14,11 +14,9 @@ void init(enum tileType *b) {
 			b[col + row * COLUMNS] = 0;
 }
 
-void printBoard(enum tileType *b) {
+void printBoard(enum tileType *b, int yPos) {
 	int boardMinXPixel = XRES/2 - TILE_WIDTH /2 * COLUMNS;
-	int boardMinYPixel = YRES/2 - TILE_HEIGHT/2 * ROWS;
-
-	paint(colorsTo16Bit(backgroundColor));
+	int boardMinYPixel = yPos;
 
 	for(int y = 0; y < ROWS; ++ y) {
 		for(int x = 0; x < COLUMNS; ++ x) {
