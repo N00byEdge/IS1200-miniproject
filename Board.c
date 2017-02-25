@@ -3,8 +3,10 @@
 #include "ImageData.h"
 
 unsigned char backgroundColor[4] = {0xaa, 0xaa, 0xaa, 0xff};
+
 unsigned char redColor[4] = {0xff, 0x00, 0x00, 55};
 unsigned char greenColor[4] = {0x00, 0xff, 0x00, 55};
+unsigned char blueColor[4] = {0x00, 0x00, 0xff, 55};
 
 void init(enum tileType *b) {
 	for(int col = 0; col < COLUMNS; ++ col)
