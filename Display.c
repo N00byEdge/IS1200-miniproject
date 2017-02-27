@@ -132,10 +132,12 @@ void displayinit() {
 }
 
 void paint(unsigned c) {
-	setArea(0, 240, 0, 320);
-	for(int y = 0; y < 320; ++ y)
-		for(int x = 0; x < 240; ++ x)
+	for(int y = 0; y < 320; ++ y) {
+		for(int x = 0; x < 240; ++ x) {
+			setArea(x, x + 1, y, y + 1);
 			writeData16(c);
+		}
+	}
 }
 
 void paintArea(unsigned c, unsigned x0, unsigned x1, unsigned y0, unsigned y1) {
@@ -154,4 +156,17 @@ void paintimg(const unsigned char *data, unsigned xSize, unsigned ySize, unsigne
 			writeData16(col(data, (x-y)*4 + y*4*xSize));
         }
     }
+}
+
+void paintimgWithScale(const unsigned char *data, unsigned xSize, unsigned ySize, unsigned atX, unsigned atY, unsigned scale) {
+	for(int y = 0; y < ySize; ++ y) {
+		for(int i = 0; i < scale; ++ i) {
+			for(int x = 0; x < xSize; ++ x) {
+				for(int j = 0; j < scale; ++ j) {
+					setArea(atX + x*scale + j, atX + x*scale + 1 + j, atY + y*scale + i, atY + y*scale + i + 1);
+					writeData16(col(data, x*4 + y*4*xSize));
+				}
+			}
+		}
+	}
 }
