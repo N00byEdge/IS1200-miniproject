@@ -150,7 +150,7 @@ void paintArea(unsigned c, unsigned x0, unsigned x1, unsigned y0, unsigned y1) {
 			writeData16(c);
 }
 
-void paintimg(const char *data, unsigned xSize, unsigned ySize, unsigned atX, unsigned atY) {
+void paintimg(const unsigned char *data, unsigned xSize, unsigned ySize, unsigned atX, unsigned atY) {
     for(int x = 0; x < xSize; ++ x) {
         for(int y = 0; y < ySize; ++ y) {
         	if(data[3 + x*4 + y*4*xSize]) {
