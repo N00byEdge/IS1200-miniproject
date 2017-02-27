@@ -33,7 +33,7 @@ void printBoard(enum tileType *b, int yPos, int isActive) {
 				fillColor(drawArea, redColor, 16, 16);
 			else if(b[x + y*COLUMNS] & TILE_IS_AIMING)
 				fillColor(drawArea, blueColor, 16, 16);
-			frame(drawArea);
+			frame(drawArea, 16, 16);
 			if(b[x + y*COLUMNS] & TILE_MISS)
 				renderTile(missPicture, drawArea, 0, 0, 16, 16, 0, 0);
 			if(b[x + y*COLUMNS] & TILE_HIT)
