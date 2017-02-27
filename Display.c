@@ -148,17 +148,10 @@ void paintArea(unsigned c, unsigned x0, unsigned x1, unsigned y0, unsigned y1) {
 #define col(arr, pos) (((unsigned int)(arr[(pos)]>>3) << 11) | ((unsigned int)(arr[(pos) + 1] >> 2) << 5) | (unsigned int)(arr[(pos) + 2] >> 3))
 
 void paintimg(const unsigned char *data, unsigned xSize, unsigned ySize, unsigned atX, unsigned atY) {
-	//setArea(atX, atX + xSize, atY, atY + ySize);
-    for(int x = 0; x < xSize; ++ x) {
-        for(int y = 0; y < ySize; ++ y) {
-        	if(data[3 + x*4 + y*4*xSize]) {
-        		setArea(atX + x, atX + x + 1, atY + y, atY + y + 1);
-            	writeData16(col(data, x*4 + y*4*xSize));
-        	}
+	setArea(atX, atX + xSize, atY, atY + ySize);
+    for(int y = 0; y < ySize; ++ y) {
+        for(int x = 0; x < xSize; ++ x) {
+			writeData16(col(data, (x-y)*4 + y*4*xSize));
         }
     }
-}
-
-unsigned colorsTo16Bit(const unsigned char *d) {
-	return col(d, 0);
 }
