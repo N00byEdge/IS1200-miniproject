@@ -24,7 +24,7 @@
 #define clrrst() PORTBCLR = 1 << 1
 
 #define setbus(d)	PORTECLR = 0x0ff; \
-				 	PORTESET = d
+				 	PORTESET = d & 0x0ff
 
 #define writeCmd(c, d) \
 	clrrs(); \
