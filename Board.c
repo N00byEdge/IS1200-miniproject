@@ -3,6 +3,7 @@
 #include "ImageData.h"
 
 unsigned char backgroundColor[4] = {0xaa, 0xaa, 0xaa, 0xff};
+unsigned char whiteBackGroundColor[4] = {0xff, 0xff, 0xff, 0xff};
 
 unsigned char redColor[4] = {0xff, 0x00, 0x00, 55};
 unsigned char greenColor[4] = {0x00, 0xff, 0x00, 55};
@@ -14,14 +15,14 @@ void init(enum tileType *b) {
 			b[col + row * COLUMNS] = 0;
 }
 
-void printBoard(enum tileType *b, int yPos) {
+void printBoard(enum tileType *b, int yPos, int isActive) {
 	int boardMinXPixel = XRES/2 - TILE_WIDTH /2 * COLUMNS;
 	int boardMinYPixel = yPos;
 
 	for(int y = 0; y < ROWS; ++ y) {
 		for(int x = 0; x < COLUMNS; ++ x) {
 			unsigned char drawArea[16*16*4];
-			fillColor(drawArea, backgroundColor, 16, 16);
+			fillColor(drawArea, isActive ? whiteBackGroundColor : backgroundColor, 16, 16);
 			if((b[x + y*COLUMNS] & TILE_IS_PLACING) &&
 			   (b[x + y*COLUMNS] & TILE_SHIP))
 				fillColor(drawArea, redColor, 16, 16);

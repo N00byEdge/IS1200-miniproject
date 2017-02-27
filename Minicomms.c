@@ -23,7 +23,7 @@ struct packet listenShot(enum tileType *board) {
 
 	// Recieve data
 
-	if(board[p.x + p.y*COLUMNS] |= TILE_SHIP)
+	if(board[p.x + p.y*COLUMNS] & TILE_SHIP)
 		p.didHit = 1;
 
 	p.didWin = 1;

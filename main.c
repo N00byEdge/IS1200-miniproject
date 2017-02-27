@@ -33,18 +33,18 @@ int main() {
 
 	displayinit();
 	buttonsInit();
-	printBoard(theirBoard, 0);
+	printBoard(theirBoard, 0, 0); // Draw the enemy board
 
 	// Ship placement loop
 	for(int ship = 0; ship < sizeof(shipLengths)/sizeof(shipLengths[0]); ++ ship) {
-		int cursorX = 0, cursorY = 0, rotation = 0;
+		int cursorX = 0, cursorY = 0, rotation = 0; // Reset cursor and ship rotation
 		for(int i = 0; i < shipLengths[ship]; ++ i)
-			ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
+			ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING; // Mark the tiles we are currently placing onto
 		retryplace:
 		while (1) {
 			for(int i = 0; i < shipLengths[ship]; ++ i)
 				ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
-			printBoard(ourBoard, 160);
+			printBoard(ourBoard, 160, 1);
 			nvm:
 			while(!getButtons());
 			if(getButtonRight()) {
@@ -102,12 +102,13 @@ int main() {
 			ourBoard[i*!rotation + cursorX + COLUMNS*(i*rotation + cursorY)] &= ~TILE_IS_PLACING;
 	}
 
+	printBoard(ourBoard, 160, 0);
 	int cursorX = 0, cursorY = 0, goesFirst = 1;
 	struct packet p;
 	if(!goesFirst) goto waitotherplayer;
 	backtogame:
-	printBoard(theirBoard, 0);
 	theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
+	printBoard(theirBoard, 0, 1);
 
 	while(1) {
 		while(!getButtons());
@@ -116,7 +117,7 @@ int main() {
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
 			-- cursorY;
 			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
-			printBoard(theirBoard, 0);
+			printBoard(theirBoard, 0, 1);
 			while(getButtonUp());
 		}
 
@@ -125,7 +126,7 @@ int main() {
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
 			++ cursorY;
 			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
-			printBoard(theirBoard, 0);
+			printBoard(theirBoard, 0, 1);
 			while(getButtonDown());
 		}
 
@@ -134,16 +135,16 @@ int main() {
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
 			-- cursorX;
 			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
-			printBoard(theirBoard, 0);
+			printBoard(theirBoard, 0, 1);
 			while(getButtonLeft());
 		}
 
 		if(getButtonRight()){
 			if(cursorX == 9) continue;
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
-			-- cursorX;
+			++ cursorX;
 			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
-			printBoard(theirBoard, 0);
+			printBoard(theirBoard, 0, 1);
 			while(getButtonRight());
 		}
 
@@ -162,7 +163,8 @@ int main() {
 		theirBoard[cursorX + cursorY*COLUMNS] |= TILE_SHIP|TILE_HIT;
 	else
 		theirBoard[cursorX + cursorY*COLUMNS] |= TILE_MISS;
-	printBoard(theirBoard, 0);
+	printBoard(theirBoard, 0, 0);
+	printBoard(ourBoard, 160, 1);
 
 	waitotherplayer:
 	p = listenShot(ourBoard);
@@ -170,4 +172,8 @@ int main() {
 		ourBoard[p.x + p.y*COLUMNS] |= TILE_HIT; 
 	else
 		ourBoard[p.x + p.y*COLUMNS] |= TILE_MISS;
+
+	printBoard(ourBoard, 160, 0);
+
+	goto backtogame;
 }
