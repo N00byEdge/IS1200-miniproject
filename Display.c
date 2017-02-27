@@ -26,48 +26,43 @@
 #define setbus(d)	PORTECLR = 0x0ff; \
 				 	PORTESET = d
 
-void writeCmd(unsigned char c, unsigned char d) {
-	clrrs();
-	clrcs();
-	setbus(c);
-	clrwr();
-	setwr();
-	setbus(d);
-	clrwr();
-	setwr();
+#define writeCmd(c, d) \
+	clrrs(); \
+	clrcs(); \
+	setbus(c); \
+	clrwr(); \
+	setwr(); \
+	setbus(d); \
+	clrwr(); \
+	setwr(); \
 	setcs();
-}
 
-void writeData(unsigned char c, unsigned char d) {
-	setrs();
-	clrcs();
-	setbus(c);
-	clrwr();
-	setwr();
-	setbus(d);
-	clrwr();
-	setwr();
+#define writeData(c, d) \
+	setrs(); \
+	clrcs(); \
+	setbus(c); \
+	clrwr(); \
+	setwr(); \
+	setbus(d); \
+	clrwr(); \
+	setwr(); \
 	setcs();
-}
 
-void writeData16(unsigned data) {
-	writeData(data >> 8, data);
-}
+#define writeData16(d) \
+	writeData(d >> 8, d);
 
-void setData(unsigned char addr, unsigned data) {
-	writeCmd(0x00, addr);
-	writeData16(data);
-}
+#define setData(a, d) \
+	writeCmd(0x00, a); \
+	writeData16(d);
 
-void setArea(unsigned x0, unsigned x1, unsigned y0, unsigned y1) {
-	setData(WINDOW_XADDR_START, x0);
-	setData(WINDOW_XADDR_END,   x1);
-	setData(WINDOW_YADDR_START, y0);
-	setData(WINDOW_YADDR_END,   y1);
-	setData(GRAM_XADDR, x0);
-	setData(GRAM_YADDR, y0);
+#define setArea(x0, x1, y0, y1) \
+	setData(WINDOW_XADDR_START, x0); \
+	setData(WINDOW_XADDR_END,   x1); \
+	setData(WINDOW_YADDR_START, y0); \
+	setData(WINDOW_YADDR_END,   y1); \
+	setData(GRAM_XADDR, x0); \
+	setData(GRAM_YADDR, y0); \
 	writeCmd(0x00, 0x22);
-}
 
 void displayinit() {
 	TRISBCLR = (1 << 1);
@@ -150,17 +145,20 @@ void paintArea(unsigned c, unsigned x0, unsigned x1, unsigned y0, unsigned y1) {
 			writeData16(c);
 }
 
+#define col(arr, pos) (((unsigned int)(arr[(pos)]>>3) << 11) | ((unsigned int)(arr[(pos) + 1] >> 2) << 5) | (unsigned int)(arr[(pos) + 2] >> 3))
+
 void paintimg(const unsigned char *data, unsigned xSize, unsigned ySize, unsigned atX, unsigned atY) {
+	//setArea(atX, atX + xSize, atY, atY + ySize);
     for(int x = 0; x < xSize; ++ x) {
         for(int y = 0; y < ySize; ++ y) {
         	if(data[3 + x*4 + y*4*xSize]) {
         		setArea(atX + x, atX + x + 1, atY + y, atY + y + 1);
-            	writeData16(colorsTo16Bit(data + x*4 + y*4*xSize));
+            	writeData16(col(data, x*4 + y*4*xSize));
         	}
         }
     }
 }
 
 unsigned colorsTo16Bit(const unsigned char *d) {
-	return ((d[0]>>3) << 11) | ((d[1]>>2) << 5) | (d[2]>>3);
+	return col(d, 0);
 }
