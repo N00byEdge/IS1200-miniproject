@@ -36,15 +36,14 @@ int main() {
 	printBoard(theirBoard, 0, 0); // Draw the enemy board
 
 	// Ship placement loop
+	int cursorX = 0, cursorY = 0, rotation = 0;
 	for(int ship = 0; ship < sizeof(shipLengths)/sizeof(shipLengths[0]); ++ ship) {
-		int cursorX = 0, cursorY = 0, rotation = 0; // Reset cursor and ship rotation
+		while(getButtonAccept());
 		for(int i = 0; i < shipLengths[ship]; ++ i)
 			ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING; // Mark the tiles we are currently placing onto
+		printBoard(ourBoard, 160, 1);
 		retryplace:
 		while (1) {
-			for(int i = 0; i < shipLengths[ship]; ++ i)
-				ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
-			printBoard(ourBoard, 160, 1);
 			nvm:
 			while(!getButtons());
 			if(getButtonRight()) {
@@ -52,6 +51,9 @@ int main() {
 				for(int i = 0; i < shipLengths[ship]; ++ i)
 					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
 				++ cursorX;
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
+				printBoard(ourBoard, 160, 1);
 				while(getButtonRight());
 			}
 
@@ -60,6 +62,9 @@ int main() {
 				for(int i = 0; i < shipLengths[ship]; ++ i)
 					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
 				-- cursorX;
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
+				printBoard(ourBoard, 160, 1);
 				while(getButtonLeft());
 			}
 
@@ -68,6 +73,9 @@ int main() {
 				for(int i = 0; i < shipLengths[ship]; ++ i)
 					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
 				++ cursorY;
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
+				printBoard(ourBoard, 160, 1);
 				while(getButtonDown());
 			}
 
@@ -76,6 +84,9 @@ int main() {
 				for(int i = 0; i < shipLengths[ship]; ++ i)
 					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
 				-- cursorY;
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
+				printBoard(ourBoard, 160, 1);
 				while(getButtonUp());
 			}
 
@@ -93,7 +104,6 @@ int main() {
 			}
 
 			if(getButtonAccept()) {
-				while(getButtonAccept());
 				break;
 			}
 		}
