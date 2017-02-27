@@ -84,8 +84,11 @@ int main() {
 				for(int i = 0; i < shipLengths[ship]; ++ i)
 					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] &= ~TILE_IS_PLACING;
 				rotation = !rotation;
-				if(cursorX + !rotation*shipLengths[ship] >= 10) cursorX -= shipLengths[ship] - 1;
-				if(cursorY +  rotation*shipLengths[ship] >= 10) cursorY -= shipLengths[ship] - 1;
+				if(cursorX + !rotation*(shipLengths[ship] - 1) >= 10) cursorX = 10 - shipLengths[ship];
+				if(cursorY +  rotation*(shipLengths[ship] - 1) >= 10) cursorY = 10 - shipLengths[ship];
+				for(int i = 0; i < shipLengths[ship]; ++ i)
+					ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING;
+				printBoard(ourBoard, 160, 1);
 				while(getButtonRotate());
 			}
 
