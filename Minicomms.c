@@ -10,6 +10,7 @@ void sendShot(struct packet *p) {
 	// Recieve didHit and didWin
 
 	p->didHit = t++%2;
+	p->didWin = 0;
 
 	return;
 }
@@ -23,8 +24,8 @@ struct packet listenShot(enum tileType *board) {
 
 	// Recieve data
 
-	if(board[p.x + p.y*COLUMNS] & TILE_SHIP)
-		p.didHit = 1;
+	p.didHit = board[p.x + p.y*COLUMNS] & TILE_SHIP;
+	board[p.x + p.y*COLUMNS] |= p.didHit ? TILE_HIT : TILE_MISS;
 
 	p.didWin = 1;
 	for(int i = 0; i < ROWS*COLUMNS; ++ i)
