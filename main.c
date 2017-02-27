@@ -4,6 +4,7 @@
 #include "Display.h"
 #include "Lib.h"
 #include "Renderer.h"
+#include "Minicomms.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -101,8 +102,72 @@ int main() {
 			ourBoard[i*!rotation + cursorX + COLUMNS*(i*rotation + cursorY)] &= ~TILE_IS_PLACING;
 	}
 
-	// Game loop
-	while(1) {
+	int cursorX = 0, cursorY = 0, goesFirst = 1;
+	struct packet p;
+	if(!goesFirst) goto waitotherplayer;
+	backtogame:
+	printBoard(theirBoard, 0);
+	theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
 
+	while(1) {
+		while(!getButtons());
+		if(getButtonUp()){
+			if(!cursorY) continue;
+			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
+			-- cursorY;
+			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
+			printBoard(theirBoard, 0);
+			while(getButtonUp());
+		}
+
+		if(getButtonDown()){
+			if(cursorY == 9) continue;
+			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
+			++ cursorY;
+			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
+			printBoard(theirBoard, 0);
+			while(getButtonDown());
+		}
+
+		if(getButtonLeft()){
+			if(!cursorX) continue;
+			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
+			-- cursorX;
+			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
+			printBoard(theirBoard, 0);
+			while(getButtonLeft());
+		}
+
+		if(getButtonRight()){
+			if(cursorX == 9) continue;
+			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
+			-- cursorX;
+			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
+			printBoard(theirBoard, 0);
+			while(getButtonRight());
+		}
+
+		if(getButtonAccept()){
+			if(!theirBoard[cursorX + cursorY*COLUMNS] & (TILE_HIT|TILE_MISS)) continue;
+			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
+			while(getButtonAccept());
+			break;
+		}
 	}
+
+	p.x = cursorX;
+	p.y = cursorY;
+	sendShot(&p);
+	if(p.didHit)
+		theirBoard[cursorX + cursorY*COLUMNS] |= TILE_SHIP|TILE_HIT;
+	else
+		theirBoard[cursorX + cursorY*COLUMNS] |= TILE_MISS;
+	printBoard(theirBoard, 0);
+
+	waitotherplayer:
+	p = listenShot(ourBoard);
+	if(p.didHit)
+		ourBoard[p.x + p.y*COLUMNS] |= TILE_HIT; 
+	else
+		ourBoard[p.x + p.y*COLUMNS] |= TILE_MISS;
 }

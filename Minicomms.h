@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Board.h"
+
 struct packet {
 	int x, y;
-	bool didHit;
-	bool didWin;
-}
+	int didHit;
+	int didWin;
+};
 
-bool sendShot(struct packet *);
+void sendShot(struct packet *p);
 
-struct packet listenShot();
+struct packet listenShot(enum tileType *board);
