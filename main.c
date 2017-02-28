@@ -214,7 +214,7 @@ int main() {
 			while(getButtonRight());
 		}
 
-		if(getButtonAccept()){
+		if(getButtonAccept() && getButtonRotate()){
 			if(theirBoard[cursorX + cursorY*COLUMNS] & (TILE_HIT|TILE_MISS)) continue;
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
 			while(getButtonAccept());
