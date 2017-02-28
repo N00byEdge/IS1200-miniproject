@@ -156,9 +156,8 @@ int main() {
 				while(getButtonRotate());
 			}
 
-			if(getButtonAccept()) {
+			if(getButtonAccept())
 				break;
-			}
 		}
 		for(int i = 0; i < shipLengths[ship]; ++ i)
 			if(ourBoard[i*!rotation + cursorX + COLUMNS*(i*rotation + cursorY)] & TILE_SHIP)
