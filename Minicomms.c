@@ -9,21 +9,22 @@ void sendShot(struct packet *p) {
 
 	// Recieve didHit and didWin
 
-	p->didHit = t++%2;
-	p->didWin = 0;
+	p->didHit = p->x%2;
+	p->didWin = t++ > 30;
 
 	return;
 }
 
 struct packet listenShot(enum tileType *board) {
-	static int x = 5;
-	static int y = 6;
+	static unsigned int t = 38423;
+	t ^= t*3;
 	struct packet p;
-	p.x = ++x%10;
-	p.y = ++y%10;
 
 	// Recieve data
+	p.x = t%10;
+	p.y = (t%100)/10;
 
+	// Game logic
 	p.didHit = board[p.x + p.y*COLUMNS] & TILE_SHIP;
 	board[p.x + p.y*COLUMNS] |= p.didHit ? TILE_HIT : TILE_MISS;
 
