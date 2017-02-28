@@ -91,7 +91,7 @@ int main() {
 	// Ship placement loop
 	int cursorX = 0, cursorY = 0, rotation = 0;
 	for(int ship = 0; ship < sizeof(shipLengths)/sizeof(shipLengths[0]); ++ ship) {
-		while(getButtonAccept());
+		while(getButtonAccept() || getButtonRotate());
 		for(int i = 0; i < shipLengths[ship]; ++ i)
 			ourBoard[cursorX + !rotation*i + (cursorY + rotation*i)*COLUMNS] |= TILE_IS_PLACING; // Mark the tiles we are currently placing onto
 		printBoard(ourBoard, 160, 1);
@@ -230,8 +230,8 @@ int main() {
 	else
 		theirBoard[cursorX + cursorY*COLUMNS] |= TILE_MISS;
 	printBoard(theirBoard, 0, 0);
-	printBoard(ourBoard, 160, 0);
 	if(p.didWin) goto youwinscreen;
+	printBoard(ourBoard, 160, 1);
 
 	waitotherplayer:
 	p = listenShot(ourBoard);
@@ -239,7 +239,7 @@ int main() {
 		ourBoard[p.x + p.y*COLUMNS] |= TILE_HIT;
 	else
 		ourBoard[p.x + p.y*COLUMNS] |= TILE_MISS;
-
+	printBoard(ourBoard, 160, 1);
 	printBoard(ourBoard, 160, 0);
 	if(p.didWin) goto youlosescreen;
 	else goto backtogame;
