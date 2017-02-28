@@ -179,7 +179,7 @@ int main() {
 	while(1) {
 		while(!getButtons());
 		if(getButtonUp()){
-			if(!cursorY) continue;
+			if(!cursorY || getButtonRotate()) continue;
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
 			-- cursorY;
 			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
@@ -188,7 +188,7 @@ int main() {
 		}
 
 		if(getButtonDown()){
-			if(cursorY == 9) continue;
+			if(cursorY == 9 || getButtonRotate()) continue;
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
 			++ cursorY;
 			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
@@ -197,7 +197,7 @@ int main() {
 		}
 
 		if(getButtonLeft()){
-			if(!cursorX) continue;
+			if(!cursorX || getButtonRotate()) continue;
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
 			-- cursorX;
 			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
@@ -206,7 +206,7 @@ int main() {
 		}
 
 		if(getButtonRight()){
-			if(cursorX == 9) continue;
+			if(cursorX == 9 || getButtonRotate()) continue;
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
 			++ cursorX;
 			theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
