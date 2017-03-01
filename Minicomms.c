@@ -60,10 +60,10 @@ struct packet listenShot(enum tileType *board) {
 	struct packet p;
 
 	p.x = 0, p.y = 0;
-  for(int i = 0; i < 4; ++ i, p.x <<= 1)
-    recieveBit(&(p.x));
-  for(int i = 0; i < 4; ++ i, p.y <<= 1)
-    recieveBit(&(p.y));
+	for(int i = 0; i < 4; ++ i, p.x <<= 1)
+		recieveBit(&(p.x));
+	for(int i = 0; i < 4; ++ i, p.y <<= 1)
+		recieveBit(&(p.y));
 
 
 	p.didHit = board[p.x + p.y*COLUMNS] & TILE_SHIP;
