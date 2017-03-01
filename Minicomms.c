@@ -4,7 +4,7 @@
 
 #define SETRDY PORTDSET=1<<5
 #define CLRRDY PORTDCLR=1<<5
-#define ACK (PORTD>>11) &1
+#define ACK ((PORTD>>11) &1)
 #define WRITEDATA(k) \
 	TRISDCLR = 1>>6; \
 	PORTDCLR = 1<<6; \
@@ -23,29 +23,29 @@ void commsinit(){
 }
 
 void sendBit(int b) {
-  WRITEDATA(b);
-  SETRDY;
-  while(!ACK);
-  CLRRDY;
-  while(ACK);
+  	WRITEDATA(b);
+	SETRDY;
+	while(!ACK);
+	CLRRDY;
+	while(ACK);
 }
 
 void recieveBit(int *b) {
-  while(!ACK);
-  SETRDY;
+	while(!ACK);
+	SETRDY;
 	READDATA(b);
-  while(ACK);
-  CLRRDY;
+	while(ACK);
+	CLRRDY;
 }
 
 void sendShot(struct packet *p) {
 	static int hitcounter = 0;
 	for(int i = 4; i --> 0;)
-    sendBit(p->x >> i);
-  for(int i = 4; i --> 0;)
-    sendBit(p->y >> i);
-  int didHit;
-  recieveBit(&didHit);
+		sendBit(p->x >> i);
+	for(int i = 4; i --> 0;)
+		sendBit(p->y >> i);
+	int didHit;
+	recieveBit(&didHit);
 	p->didHit = didHit;
 	hitcounter += didHit;
 
