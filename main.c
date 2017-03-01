@@ -176,6 +176,7 @@ int main() {
 	backtogame:
 	theirBoard[cursorX + cursorY*COLUMNS] |= TILE_IS_AIMING;
 	printBoard(theirBoard, 0, 1);
+	int lastRotate = getButtonRotate();
 
 	while(1) {
 		while(!getButtons());
@@ -220,6 +221,11 @@ int main() {
 			theirBoard[cursorX + cursorY*COLUMNS] &= ~TILE_IS_AIMING;
 			while(getButtonAccept());
 			break;
+		}
+
+		if(getButtonRotate() != lastRotate) {
+			lastRotate = getButtonRotate();
+			printBoard(theirBoard, 0, 1);
 		}
 	}
 
