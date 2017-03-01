@@ -89,6 +89,30 @@ int main() {
 	printBoard(theirBoard, 0, 0); // Draw the enemy board
 	printBoard(ourBoard, 160, 1);
 
+	int fem = 0;
+	recieveBit(&fem);
+	if(fem != 0) {
+		PORTE = fem;
+		return 0;
+	}
+
+	fem = 0;
+	recieveBit(&fem);
+	if(fem != 1) {
+		PORTE = fem;
+		return 0;
+	}
+
+	fem = 0;
+	recieveBit(&fem);
+	if(fem != 0) {
+		PORTE = fem;
+		return 0;
+	}
+	sendBit(1);
+	sendBit(0);
+	sendBit(1);
+
 	// Ship placement loop
 	int cursorX = 0, cursorY = 0, rotation = 0;
 	for(int ship = 0; ship < sizeof(shipLengths)/sizeof(shipLengths[0]); ++ ship) {
