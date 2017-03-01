@@ -18,6 +18,7 @@
 void commsinit(){
 	TRISDSET = (1 << 11);
 	TRISDCLR = (1 << 5);
+	PORTDCLR = (1 << 5);
 	CLRRDY;
 	return;
 }
