@@ -8,6 +8,12 @@ struct packet {
 	int didWin;
 };
 
+void commsinit();
+
 void sendShot(struct packet *p);
 
 struct packet listenShot(enum tileType *board);
+
+void recieveBit(int *b);
+
+void sendBit(int b);
