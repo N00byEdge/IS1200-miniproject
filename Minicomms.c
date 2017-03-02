@@ -26,7 +26,10 @@ struct packet listenShot(enum tileType *board) {
 	p.y = (t%100)/10;
 
 	// Game logic
-	p.didHit = board[p.x + p.y*COLUMNS] & TILE_SHIP;
+	if(board[p.x + p.y*COLUMNS] & TILE_SHIP)
+		p.didHit = 1;
+	else
+		p.didHit = 0;
 	board[p.x + p.y*COLUMNS] |= p.didHit ? TILE_HIT : TILE_MISS;
 
 	p.didWin = 1;
