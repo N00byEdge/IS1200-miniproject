@@ -26,47 +26,29 @@ void commsinit(){
 
 void sendBit(int b) {
 	WRITEDATA(b);
-	//PORTE = 1;
-  	//PORTE = 2;
 	SETRDY;
-	//PORTE = 3;
 	while(!ACK);
-	//PORTE = 4;
 	CLRRDY;
-	//PORTE = 5;
 	while(ACK);
-	//PORTE = 6;
 }
 
 void recieveBit(int *b) {
-	//PORTE = 7;
 	while(!ACK);
-	//PORTE = 8;
 	SETRDY;
-	//PORTE = 9;
 	READDATA(b);
-	//PORTE = 10;
 	while(ACK);
-	//PORTE = 11;
 	CLRRDY;
-	//PORTE = 12;
 }
 
 void sendShot(struct packet *p) {
 	static int hitcounter = 0;
 	static int c = 0;
 
-	for(int i = 4; i --> 0;) {
-		fastsleep(100);
+	for(int i = 4; i --> 0;)
 		sendBit((p->x) >> i);
-		PORTE = c++;
-	}
 
-	for(int i = 4; i --> 0;) {
-		fastsleep(100);
+	for(int i = 4; i --> 0;)
 		sendBit((p->y) >> i);
-		PORTE = c++;
-	}
 
 	int didHit = 0;
 	recieveBit(&didHit);
@@ -85,26 +67,20 @@ struct packet listenShot(enum tileType *board) {
 	struct packet p;
 
 	p.x = 0, p.y = 0;
-	for(int i = 0; i < 4; i ++){
+	for(int i = 0; i < 4; ++ i) {
 		p.x <<= 1;
 		recieveBit(&(p.x));
 	}
 
-	for(int i = 0; i < 4; i ++) {
+	for(int i = 0; i < 4; ++ i) {
 		p.y <<= 1;
 		recieveBit(&(p.y));
 	}
-
-	PORTE = p.x;
-	fastsleep(1000);
-	PORTE = p.y;
-	fastsleep(1000);
 
 	if(board[p.x + p.y*COLUMNS] & TILE_SHIP)
 		p.didHit = 1;
 	else
 		p.didHit = 0;
-	// p.didHit = board[p.x + p.y*COLUMNS] & TILE_SHIP;
 	board[p.x + p.y*COLUMNS] |= (p.didHit ? TILE_HIT : TILE_MISS);
 
 	p.didWin = 1;
@@ -112,13 +88,10 @@ struct packet listenShot(enum tileType *board) {
 		if((board[i] & TILE_SHIP) && ((board[i]) & TILE_HIT) == 0)
 			p.didWin = 0;
 
-	PORTE = p.didHit;
-
-	fastsleep(3000);
-
 	sendBit(p.didHit);
 	return p;
 }
+
 // data -> 1 bit of data I/O, linked to data on other device							(brown cable)	- rd 6
 // ack  -> ready for data transfer? linked to rdy on other device					(Red cable)		-	rd 11
 // rdy  -> are we ready for data transfer? linked to ack on other device	(Orange cable)- rd 5

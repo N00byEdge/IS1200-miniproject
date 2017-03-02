@@ -112,7 +112,7 @@ int main() {
 		return 0;
 	}
 	fastsleep(1000);
-
+	
 	sendBit(1);
 	fastsleep(1000);
 	sendBit(0);
