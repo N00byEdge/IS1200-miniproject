@@ -1,6 +1,7 @@
 #include "Board.h"
 
 #include "ImageData.h"
+#include "Input.h"
 
 unsigned char backgroundColor[4] = {0xaa, 0xaa, 0xaa, 0xff};
 unsigned char whiteBackGroundColor[4] = {0xff, 0xff, 0xff, 0xff};
@@ -18,6 +19,7 @@ void init(enum tileType *b) {
 void printBoard(enum tileType *b, int yPos, int isActive) {
 	int boardMinXPixel = XRES/2 - TILE_WIDTH /2 * COLUMNS;
 	int boardMinYPixel = yPos;
+	int rotateButton = getButtonRotate();
 
 	for(int y = 0; y < ROWS; ++ y) {
 		for(int x = 0; x < COLUMNS; ++ x) {
@@ -31,8 +33,10 @@ void printBoard(enum tileType *b, int yPos, int isActive) {
 			else if((b[x + y*COLUMNS] & TILE_IS_AIMING) &&
 					(b[x + y*COLUMNS] & (TILE_HIT|TILE_MISS)))
 				fillColor(drawArea, redColor, 16, 16);
-			else if(b[x + y*COLUMNS] & TILE_IS_AIMING)
+			else if((b[x + y*COLUMNS] & TILE_IS_AIMING) && rotateButton)
 				fillColor(drawArea, blueColor, 16, 16);
+			else if(b[x + y*COLUMNS] & TILE_IS_AIMING)
+				fillColor(drawArea, greenColor, 16, 16);
 			frame(drawArea, 16, 16);
 			if(b[x + y*COLUMNS] & TILE_MISS)
 				renderTile(missPicture, drawArea, 0, 0, 16, 16, 0, 0);
