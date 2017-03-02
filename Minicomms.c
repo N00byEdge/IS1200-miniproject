@@ -4,14 +4,15 @@
 
 #define SETRDY PORTDSET=1<<5
 #define CLRRDY PORTDCLR=1<<5
-#define ACK ((PORTD>>11) &1)
+#define ACK ((PORTD>>11) & 1)
 #define WRITEDATA(k) \
-	TRISDCLR = 1>>6; \
+	TRISDCLR = 1<<6; \
 	PORTDCLR = 1<<6; \
 	PORTDSET = (k&1) << 6;
 #define READDATA(k) \
-	TRISDSET = 1>>6; \
-	(*k) |= (PORTD >>6) & 1;
+	TRISDSET = 1 << 6; \
+	(*k) &= ~1; \
+	(*k) |= (PORTD >> 6) & 1;
 
 
 
@@ -24,29 +25,52 @@ void commsinit(){
 }
 
 void sendBit(int b) {
-  	WRITEDATA(b);
+	WRITEDATA(b);
+	//PORTE = 1;
+  	//PORTE = 2;
 	SETRDY;
+	//PORTE = 3;
 	while(!ACK);
+	//PORTE = 4;
 	CLRRDY;
+	//PORTE = 5;
 	while(ACK);
+	//PORTE = 6;
 }
 
 void recieveBit(int *b) {
+	//PORTE = 7;
 	while(!ACK);
+	//PORTE = 8;
 	SETRDY;
+	//PORTE = 9;
 	READDATA(b);
+	//PORTE = 10;
 	while(ACK);
+	//PORTE = 11;
 	CLRRDY;
+	//PORTE = 12;
 }
 
 void sendShot(struct packet *p) {
 	static int hitcounter = 0;
-	for(int i = 4; i --> 0;)
-		sendBit(p->x >> i);
-	for(int i = 4; i --> 0;)
-		sendBit(p->y >> i);
-	int didHit;
+	static int c = 0;
+
+	for(int i = 4; i --> 0;) {
+		fastsleep(100);
+		sendBit((p->x) >> i);
+		PORTE = c++;
+	}
+
+	for(int i = 4; i --> 0;) {
+		fastsleep(100);
+		sendBit((p->y) >> i);
+		PORTE = c++;
+	}
+
+	int didHit = 0;
 	recieveBit(&didHit);
+
 	p->didHit = didHit;
 	hitcounter += didHit;
 
@@ -61,22 +85,38 @@ struct packet listenShot(enum tileType *board) {
 	struct packet p;
 
 	p.x = 0, p.y = 0;
-	for(int i = 0; i < 4; ++ i, p.x <<= 1)
+	for(int i = 0; i < 4; i ++){
+		p.x <<= 1;
 		recieveBit(&(p.x));
-	for(int i = 0; i < 4; ++ i, p.y <<= 1)
+	}
+
+	for(int i = 0; i < 4; i ++) {
+		p.y <<= 1;
 		recieveBit(&(p.y));
+	}
 
+	PORTE = p.x;
+	fastsleep(1000);
+	PORTE = p.y;
+	fastsleep(1000);
 
-	p.didHit = board[p.x + p.y*COLUMNS] & TILE_SHIP;
-	board[p.x + p.y*COLUMNS] |= p.didHit ? TILE_HIT : TILE_MISS;
+	if(board[p.x + p.y*COLUMNS] & TILE_SHIP)
+		p.didHit = 1;
+	else
+		p.didHit = 0;
+	// p.didHit = board[p.x + p.y*COLUMNS] & TILE_SHIP;
+	board[p.x + p.y*COLUMNS] |= (p.didHit ? TILE_HIT : TILE_MISS);
 
 	p.didWin = 1;
 	for(int i = 0; i < ROWS*COLUMNS; ++ i)
 		if((board[i] & TILE_SHIP) && ((board[i]) & TILE_HIT) == 0)
 			p.didWin = 0;
 
-	sendBit(p.didHit);
+	PORTE = p.didHit;
 
+	fastsleep(3000);
+
+	sendBit(p.didHit);
 	return p;
 }
 // data -> 1 bit of data I/O, linked to data on other device							(brown cable)	- rd 6

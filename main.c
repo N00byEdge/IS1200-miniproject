@@ -95,6 +95,7 @@ int main() {
 		PORTE = fem;
 		return 0;
 	}
+	fastsleep(1000);
 
 	fem = 0;
 	recieveBit(&fem);
@@ -102,6 +103,7 @@ int main() {
 		PORTE = fem;
 		return 0;
 	}
+	fastsleep(1000);
 
 	fem = 0;
 	recieveBit(&fem);
@@ -109,8 +111,12 @@ int main() {
 		PORTE = fem;
 		return 0;
 	}
+	fastsleep(1000);
+
 	sendBit(1);
+	fastsleep(1000);
 	sendBit(0);
+	fastsleep(1000);
 	sendBit(1);
 
 	// Ship placement loop
