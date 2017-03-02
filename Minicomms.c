@@ -10,7 +10,8 @@ void sendShot(struct packet *p) {
 	// Recieve didHit and didWin
 
 	p->didHit = p->x%2;
-	p->didWin = t++ > 30;
+	t += p->didHit;
+	p->didWin = t == 17;
 
 	return;
 }
