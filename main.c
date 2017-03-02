@@ -85,39 +85,8 @@ int main() {
 
 	displayinit();
 	buttonsInit();
-	commsinit();
 	printBoard(theirBoard, 0, 0); // Draw the enemy board
 	printBoard(ourBoard, 160, 1);
-
-	int fem = 0;
-	recieveBit(&fem);
-	if(fem != 0) {
-		PORTE = fem;
-		return 0;
-	}
-	fastsleep(1000);
-
-	fem = 0;
-	recieveBit(&fem);
-	if(fem != 1) {
-		PORTE = fem;
-		return 0;
-	}
-	fastsleep(1000);
-
-	fem = 0;
-	recieveBit(&fem);
-	if(fem != 0) {
-		PORTE = fem;
-		return 0;
-	}
-	fastsleep(1000);
-
-	sendBit(1);
-	fastsleep(1000);
-	sendBit(0);
-	fastsleep(1000);
-	sendBit(1);
 
 	// Ship placement loop
 	int cursorX = 0, cursorY = 0, rotation = 0;
